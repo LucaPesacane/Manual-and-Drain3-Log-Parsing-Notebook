@@ -1,50 +1,55 @@
-# Log Analysis: Mutiny Dataset Parsing & Detection Framework
+# Log Parsing e Fault Injection in Kubernetes: Analisi del Dataset Mutiny
 
-Questo repository contiene un framework di analisi dei log applicato a un subset del dataset **Mutiny** (log di Kubernetes). L'obiettivo principale è confrontare l'efficacia del parsing manuale rispetto a quello automatizzato tramite **Drain3**, analizzando come il pre-processing dei messaggi influenzi la capacità di rilevamento delle anomalie.
+Questo repository contiene il framework di analisi sviluppato per l'elaborato di tesi triennale in Ingegneria Informatica. Il progetto si occupa del **log parsing** applicato a sistemi orchestrati con Kubernetes, con l'obiettivo di valutare la capacità di identificare anomalie derivanti da attività di **fault injection**.
 
-## Panoramica del Progetto
+## 📌 Descrizione del Progetto
+L'analisi mette a confronto due diverse metodologie di estrazione di template (parsing) e valuta l'impatto di una fase di pre-processing sui risultati finali.
 
-L'analisi esplora l'efficacia del log parsing in contesti di fault-injection (es. *less_resources*, *network faults*, ecc.) operando su due dimensioni:
+### Metodologie a confronto:
+1.  **Analisi Manuale**: Basata su pattern euristici e regole predefinite.
+2.  **Drain3**: Parser automatizzato basato su un algoritmo di clustering online (alberi a profondità fissa).
 
-### 1. Modalità di Analisi
-* **Raw Mode**: I log vengono processati nel loro stato originale.
-* **Preprocessed Mode**: I log subiscono una pulizia preventiva (rimozione di timestamp, ID esadecimali, indirizzi IP e variabili volatili) per stabilizzare i template.
-
-### 2. Metodologie di Parsing
-* **Analisi Manuale**: Basata su pattern euristici e regex definite dall'utente.
-* **Drain3 (Automated)**: Un parser online basato su alberi a profondità fissa che raggruppa i log in cluster di template in modo dinamico.
-
----
-
-## Caratteristiche Tecniche
-
-* **Dataset**: Subset di 50 file estratti casualmente dal Mutiny Dataset (seed=42 per riproducibilità).
-* **Preprocessing Pipeline**: Implementazione di filtri per la riduzione della cardinalità dei log.
-* **Metrics Engine**: Calcolo automatico di TP, FP, FN, Precision, Recall e F1-Score per ogni categoria di test.
-* **Validazione Statistica**: 
-    * **Test di McNemar**: Per valutare la significatività della differenza tra Manual e Drain3.
-    * **Kappa di Cohen**: Per misurare l'accordo sulla classificazione della baseline.
+### Modalità di esecuzione:
+* **Raw Mode**: I log vengono processati così come estratti dal sistema.
+* **Preprocessed Mode**: I log subiscono una pulizia preventiva (rimozione di timestamp, indirizzi IP, variabili volatili e ID esadecimali) per ridurre il rumore e la cardinalità dei template.
 
 ---
 
-## Risultati e Performance
+## 🛠️ How-to: Guida all'Utilizzo
 
-Il framework confronta le prestazioni attraverso diverse metriche. Di seguito i risultati tipici ottenuti dall'analisi:
-
-| Metodo | Modalità | Recall | Precision | F1-Score | Cluster/Template |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Manual** | Preprocessed | ~0.615 | 1.000 | 0.762 | - |
-| **Drain3** | Preprocessed | 1.000 | 1.000 | 1.000 | Ridotti del ~15-20% |
-| **Manual** | Raw | 1.000 | 1.000 | 1.000 | - |
-| **Drain3** | Raw | 1.000 | 1.000 | 1.000 | Alta cardinalità |
-
-> **Nota**: Il preprocessing riduce drasticamente il numero di cluster (template) generati da Drain3, rendendo l'analisi più scalabile e meno soggetta a rumore.
-
----
-
-## Requisiti e Installazione
-
-Il progetto è sviluppato in Python 3.12+. Per eseguire il notebook, installa le dipendenze necessarie:
-
+### 1. Requisiti
+Il codice è sviluppato in Python 3.12 ed è ottimizzato per l'esecuzione su **Google Colab**.
+Le librerie necessarie sono:
 ```bash
 pip install drain3 pandas numpy scikit-learn matplotlib
+
+### 2. Configurazione del Dataset
+Il notebook è configurato per interfacciarsi con Google Drive.
+
+Caricare la cartella Mutiny_dataset 2 nel proprio Drive.
+
+Il percorso atteso dal codice è: /content/drive/MyDrive/Mutiny_dataset 2/.
+
+Il dataset deve essere organizzato in sottocartelle corrispondenti alle classi di test (es. baseline, less_resources, network, more_resources).
+
+3. Esecuzione
+Aprire il file logAnalysis.ipynb in Google Colab o Jupyter.
+
+Campionamento: Il codice seleziona automaticamente un subset di 50 file casuali per velocizzare l'analisi, utilizzando un seed=42 per garantire che l'esperimento sia perfettamente riproducibile.
+
+Eseguire le celle in sequenza: il notebook caricherà i file, eseguirà il parsing (manuale e Drain3) sia in modalità Raw che Preprocessed, e infine genererà i report.
+
+📊 Analisi Statistica e Risultati
+Il framework non si limita al calcolo delle metriche classiche, ma fornisce strumenti di validazione scientifica:
+
+Metriche: Precision, Recall e F1-Score per ogni scenario di guasto.
+
+Riduzione della Cardinalità: Calcolo della percentuale di riduzione dei cluster identificati da Drain3 grazie al preprocessing.
+
+Test di McNemar: Validazione statistica per confrontare se le differenze di accuratezza tra i modelli sono significative.
+
+Kappa di Cohen: Misura dell'accordo tra il parser e la baseline reale.
+
+📂 Struttura del Repository
+logAnalysis.ipynb: Notebook principale contenente l'intera pipeline di analisi.
+README.md: Questo file di documentazione.
