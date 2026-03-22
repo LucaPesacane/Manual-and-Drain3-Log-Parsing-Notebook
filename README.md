@@ -29,7 +29,29 @@ Questa sezione applica il framework all'intero dataset Mutiny (circa **2893 file
 
 > **Nota Tecnica**: Le funzioni di preprocessing e le classi di parsing sono condivise. Se si apportano modifiche alla logica di pulizia dei log o ai parametri del parser, è bene testarle nella Sezione 1 prima di avviare l'esecuzione massiva nella Sezione 2.
 
----
+## Personalizzazione e Parametri
+
+Per adattare l'analisi a nuovi requisiti o per testare diverse configurazioni del parser, è possibile intervenire sui seguenti parametri all'interno del notebook:
+
+### 1. Parametri del Parser Drain3
+L'algoritmo **Drain3** può essere tarato modificando l'istanza di `TemplateMiner`. I parametri principali su cui agire sono:
+* `sim_th` (Similarity Threshold): Definisce quanto due messaggi di log debbano essere simili per finire nello stesso cluster. Un valore più alto crea più template (più specifici), un valore più basso ne crea meno (più generici).
+* `depth`: La profondità massima dell'albero di parsing.
+* `max_children`: Numero massimo di nodi figli per ogni nodo dell'albero.
+
+### 2. Preprocessing (Regex Masking)
+Nella sezione dedicata al preprocessing, è presente una lista di tuple denominata `masking_instructions` (o similare). È possibile aggiungere o rimuovere espressioni regolari per:
+* Mascherare nuove variabili (es. ID specifici di sessione, nomi di file, nuovi formati di timestamp).
+* Ridurre il rumore: aggiungere maschere permette di raggruppare log che differiscono solo per parametri volatili, aumentando l'efficacia del clustering.
+
+### 3. Configurazione del Dataset
+Nella prima cella di setup, si possono modificare le variabili di controllo del flusso:
+* `n_files`: Numero di file da includere nel subset di test (default: 50).
+* `seed`: Il seme per la generazione casuale. Cambiando questo valore si testerà il modello su un set di file differente, utile per verificare la robustezza statistica dei risultati.
+* `base_path`: Stringa del percorso principale del dataset (necessaria se si sposta il dataset su un'altra cartella di Drive o in locale).
+
+### 4. Gestione Checkpoint
+Per la sezione "Full Dataset", è possibile configurare la frequenza di salvataggio dei risultati parziali o la cartella di destinazione dei file `.pkl` o `.csv` generati durante l'elaborazione massiva, utile per prevenire perdite di dati in caso di disconnessione di Google Colab.
 
 ## How-to: Guida all'Utilizzo
 
