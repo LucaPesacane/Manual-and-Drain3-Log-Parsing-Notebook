@@ -22,6 +22,7 @@ Il codice è sviluppato in Python 3.12 ed è ottimizzato per l'esecuzione su **G
 Le librerie necessarie sono:
 ```bash
 pip install drain3 pandas numpy scikit-learn matplotlib
+```
 
 ### 2. Configurazione del Dataset
 Il notebook è configurato per interfacciarsi con Google Drive.
