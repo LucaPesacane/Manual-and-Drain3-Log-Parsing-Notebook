@@ -33,14 +33,14 @@ Il percorso atteso dal codice è: /content/drive/MyDrive/Mutiny_dataset 2/.
 
 Il dataset deve essere organizzato in sottocartelle corrispondenti alle classi di test (es. baseline, less_resources, network, more_resources).
 
-3. Esecuzione
+###3. Esecuzione
 Aprire il file logAnalysis.ipynb in Google Colab o Jupyter.
 
 Campionamento: Il codice seleziona automaticamente un subset di 50 file casuali per velocizzare l'analisi, utilizzando un seed=42 per garantire che l'esperimento sia perfettamente riproducibile.
 
 Eseguire le celle in sequenza: il notebook caricherà i file, eseguirà il parsing (manuale e Drain3) sia in modalità Raw che Preprocessed, e infine genererà i report.
 
-📊 Analisi Statistica e Risultati
+###📊 Analisi Statistica e Risultati
 Il framework non si limita al calcolo delle metriche classiche, ma fornisce strumenti di validazione scientifica:
 
 Metriche: Precision, Recall e F1-Score per ogni scenario di guasto.
@@ -51,6 +51,8 @@ Test di McNemar: Validazione statistica per confrontare se le differenze di accu
 
 Kappa di Cohen: Misura dell'accordo tra il parser e la baseline reale.
 
-📂 Struttura del Repository
+###📂 Struttura del Repository
+
 logAnalysis.ipynb: Notebook principale contenente l'intera pipeline di analisi.
+
 README.md: Questo file di documentazione.
